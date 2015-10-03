@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 # Scrapy settings for ss2book project
 #
 # For simplicity, this file contains only settings considered important or
@@ -14,9 +15,11 @@ BOT_NAME = 'ss2book'
 SPIDER_MODULES = ['ss2book.spiders']
 NEWSPIDER_MODULE = 'ss2book.spiders'
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__ + "/.."))
+TMP_DIR = os.path.join(BASE_DIR, "tmp")
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'ss2book (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS=32
