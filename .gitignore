@@ -1,3 +1,6 @@
+#private not uncommitable file as env vars/conf script so on
+*.dc #dont commit 
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
