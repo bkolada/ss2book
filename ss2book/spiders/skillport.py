@@ -3,6 +3,12 @@ import scrapy
 from scrapy.selector import HtmlXPathSelector
 from scrapy.http import Request
 import os
+from ss2book import settings
+
+
+def save_response(response, filename):
+    with open(os.path.join(settings.TMP_DIR, filename), "wb") as f:
+        f.write(response.body)
 
 
 class SkillportSpider(scrapy.Spider):
@@ -27,20 +33,21 @@ class SkillportSpider(scrapy.Spider):
         }
         return [scrapy.FormRequest(self.login_url,
                                    formdata=form,
-                                   callback=self.logged_in,
-                                   headers={'Referer':'http://mobile.skillport.books24x7.com/login.asp'}
-                               )]
+                                   callback=self.confirm_log_in,
+                                   headers={'Referer': 'http://mobile.skillport.books24x7.com/login.asp'}
+                                   )]
 
-    def logged_in(self, response):
-        self.logger.info("logged into skillport")
-        with open("login.html", 'wb') as f:
-            f.write(response.body)
-
-        first_page_url = 'http://mobile.skillport.books24x7.com/viewer.asp?bookid=88814&chunkid=0000000001'
-        yield scrapy.Request(first_page_url, callback=self.parse_page)
+    def confirm_log_in(self, response):
+        save_response(response, "confirm_log_in.html")
+        if "b24-errortext" in response.body:
+            self.logger.critical("Crawler couldn't log into skillport. Crawling aborted")
+            return
+        else:
+            self.logger.info("logged into skillport")
+            first_page_url = 'http://mobile.skillport.books24x7.com/viewer.asp?bookid=88814&chunkid=0000000001'
+            yield scrapy.Request(first_page_url, callback=self.parse_page)
 
     def parse_page(self, response):
         self.logger.info("jest i strona")
-        with open("page.html", 'wb') as f:
-            f.write(response.body)
+        save_response(response, "page.html")
         return None
