@@ -4,6 +4,7 @@ from scrapy.selector import HtmlXPathSelector
 from scrapy.http import Request
 import os
 from ss2book import settings
+import re
 
 
 class SkillportSpider(scrapy.Spider):
@@ -54,6 +55,30 @@ class SkillportSpider(scrapy.Spider):
             self.logger.critical("Crawler couldn't log into skillport. Crawling aborted")
 
     def parse_page(self, response):
+        """
+        parse page response
+
+        @url file:///tmp/ss2book/first_page.html
+        @returns items 0 0
+        @returns request 1 1
+        """
         self.logger.info("got page")
         self.save_response(response, "page.html")
-        return None
+
+        next_chunk = self.gen_next_chunk(response.body)
+        next_page_url = 'http://mobile.skillport.books24x7.com/viewer.asp?bookid=88814&chunkid=' + next_chunk
+        yield scrapy.Request(next_page_url, callback=self.parse_page)
+
+    def gen_next_chunk(self, body):
+        cm_pattern = "var cm = new Array\((.*?)\)"
+        cm_payload = [i if len(i) == 2 else '0'+i for i in re.findall(cm_pattern, body)[-1].split(',')]
+        self.logger.debug("cm_payload: %s", cm_payload)
+
+        ax_pattern = "var a(1|2|3|4|5) = new Array\(\d+,(\d+),\d+\)"
+        ax_list = re.findall(ax_pattern, body)[5:]
+        self.logger.debug("ax_list: %s", ax_list)
+
+        result = ''.join([ cm_payload[int(value)] for _x, value in ax_list])
+        self.logger.debug("next_chunk: %s", result)
+
+        return result
