@@ -9,6 +9,7 @@ class SkillportSpider(scrapy.Spider):
     name = 'skillport'
     allowed_domains = ['mobile.skillport.books24x7.com', 'secure.books24x7.com']
     login_url = 'https://secure.books24x7.com/express/login.asp'
+    mobile_login_url = 'http://mobile.skillport.books24x7.com/login.asp'
     page_url = 'http://mobile.skillport.books24x7.com/viewer.asp?bookid=%s&chunkid=%s'
     logout_url = 'http://mobile.skillport.books24x7.com/abandonsession.asp'
 
@@ -35,7 +36,7 @@ class SkillportSpider(scrapy.Spider):
         return [scrapy.FormRequest(self.login_url,
                                    formdata=form,
                                    callback=self.parse_login,
-                                   headers={'Referer': 'http://mobile.skillport.books24x7.com/login.asp'}
+                                   headers={'Referer': self.mobile_login_url}
                                    )]
 
     def parse_login(self, response):
@@ -67,7 +68,6 @@ class SkillportSpider(scrapy.Spider):
             return
 
         page_num = response.meta.get('page_num', -1)
-        self.logger.info('got page')
         self.save_response(response, 'page%d.html' % page_num)
 
         next_chunk = self.gen_next_chunk(response.body)
@@ -109,6 +109,6 @@ class SkillportSpider(scrapy.Spider):
 
     def save_response(self, response, filename):
         file_path = os.path.join(self.directory_path, filename)
-        self.logger.debug('saving response from %s to %s' % (response.url, file_path))
+        self.logger.debug('Saving response from %s to %s' % (response.url, file_path))
         with open(file_path, 'wb') as f:
             f.write(response.body)
