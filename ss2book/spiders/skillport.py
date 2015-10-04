@@ -32,7 +32,6 @@ class SkillportSpider(scrapy.Spider):
             'retpage': 'login.asp',
             'app': 'skillport'
         }
-        self.logger.info(form)
         return [scrapy.FormRequest(self.login_url,
                                    formdata=form,
                                    callback=self.parse_login,
@@ -72,7 +71,7 @@ class SkillportSpider(scrapy.Spider):
 
         next_chunk = self.gen_next_chunk(response.body)
 
-        if next_chunk == '00000000-1' or page_num > 5:
+        if next_chunk == '00000000-1':
             self.logger.info('Crawler finished a book. Thank you')
             yield scrapy.Request(self.logout_url, callback=self.parse_logout)
 
