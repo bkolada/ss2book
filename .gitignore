@@ -3,6 +3,9 @@
 # dont commit
 *.dc
 
+# private credentials
+env_vars
+
 #ss2book temporary downloaded sites
 tmp/
 
