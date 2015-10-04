@@ -50,7 +50,7 @@ class SkillportSpider(scrapy.Spider):
         if 'logout' in response.body.lower():
             self.logger.info("logged into skillport")
             first_page_url = 'http://mobile.skillport.books24x7.com/viewer.asp?bookid=88814&chunkid=0000000001'
-            yield scrapy.Request(first_page_url, callback=self.parse_page)
+            yield scrapy.Request(first_page_url, callback=self.parse_page, meta={'page_num':1})
         else:
             self.logger.critical("Crawler couldn't log into skillport. Crawling aborted")
 
@@ -62,12 +62,17 @@ class SkillportSpider(scrapy.Spider):
         @returns items 0 0
         @returns request 1 1
         """
+        if '<A HREF="help.asp?item=membership" BORDER="0">offlined</A>'.lower() in response.body.lower():
+            self.logger.critical("Crawler couldn't get page - content is scrambled. Crawling aborted")
+            return
+        page_num = response.meta.get('page_num', -1)
+
         self.logger.info("got page")
-        self.save_response(response, "page.html")
+        self.save_response(response, "page%d.html" % page_num)
 
         next_chunk = self.gen_next_chunk(response.body)
         next_page_url = 'http://mobile.skillport.books24x7.com/viewer.asp?bookid=88814&chunkid=' + next_chunk
-        yield scrapy.Request(next_page_url, callback=self.parse_page)
+        yield scrapy.Request(next_page_url, callback=self.parse_page, meta={'page_num':page_num+1} if page_num != -1 else {})
 
     def gen_next_chunk(self, body):
         cm_pattern = "var cm = new Array\((.*?)\)"
