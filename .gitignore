@@ -1,7 +1,13 @@
 #private not uncommitable file as env vars/conf script so on
-*.dc #dont commit
-tmp/ #ss2book temporary downloaded sites
-env_vars # private credentials
+
+# dont commit
+*.dc
+
+#ss2book temporary downloaded sites
+tmp/
+
+# private credentials
+env_vars
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
