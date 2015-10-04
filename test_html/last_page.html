@@ -1,0 +1,287 @@
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+
+
+
+<script language="javascript" type="text/javascript">
+    function getStyleSheets(style) {
+        var basicstylesheetHREF;
+        var stylesheetHREF = null; 
+        var contentstylesheetHREF;
+        var width = window.innerWidth;
+        var viewerPage = false;
+        var viewer = false;
+        var pdamode = false;
+        
+        // is this a viewer.asp?
+        try {
+            viewer = document.getElementById("viewerform").value;
+        }
+        catch (Error) { }
+
+        // ipdamode?
+        try {
+            pdamode = document.getElementById("pdamode").value;
+        }
+        catch (Error) { }
+
+        if (width > 800) {
+            stylesheetHREF = "iphone.css";
+            contentstylesheetHREF = "iphone.content.books24x7.css";
+        }
+        else if ((width <= 800) && (width > 300)) {
+            stylesheetHREF = "blackberry.css";
+            contentstylesheetHREF = "blackberry.content.books24x7.css";
+        }
+        else {
+            contentstylesheetHREF = "pda.content.books24x7.css";
+        }
+
+        //add stylesheets
+        var headID = document.getElementsByTagName("head")[0];
+
+        if (pdamode == "true") {
+            basicstylesheetHREF = "grisonpda.css";
+        }
+        else {
+            basicstylesheetHREF = "grison.css";
+        }
+        var cssNode = document.createElement('link');
+        cssNode.type = 'text/css';
+        cssNode.rel = 'stylesheet';
+        cssNode.id = 'stylesheetJS';
+        cssNode.href = basicstylesheetHREF;
+        headID.appendChild(cssNode);
+       
+        // do not add anything if this is not iphone or blackberry
+        if (stylesheetHREF != null) {
+            var cssNode1 = document.createElement('link');
+            cssNode1.type = 'text/css';
+            cssNode1.rel = 'stylesheet';
+            cssNode1.id = 'stylesheetJS1';
+            cssNode1.href = stylesheetHREF;
+            headID.appendChild(cssNode1);
+        }
+        // if this is a viewer.asp page, load an appropriate content stylesheet
+        if (viewer == "true") {
+            var cssNode2 = document.createElement('link');
+            cssNode2.type = 'text/css';
+            cssNode2.rel = 'stylesheet';
+            cssNode2.id = 'stylesheetJS2';
+            cssNode2.href = contentstylesheetHREF;
+            headID.appendChild(cssNode2);
+        }
+        var XMLHttpRequestObject = initXMLHttp();
+        if (XMLHttpRequestObject) {
+        // save the stylesheet in state
+            var dataSource = "data.asp?svc=state&data=savedstylesheet&data=" + stylesheetHREF;
+            var _datenow = new Date();
+            dataSource += "&time=" + _datenow.getTime();  // make absolutely sure nobody caches it
+            XMLHttpRequestObject.open("GET", dataSource, true);
+            XMLHttpRequestObject.onreadystatechange = function() { // don't care
+            }
+            XMLHttpRequestObject.send(null);
+        }
+    }
+
+    function initXMLHttp() {
+        var xmlhttp = null;
+        if (window != null && window.XMLHttpRequest) {
+            xmlhttp = new XMLHttpRequest();
+        }
+        else if (window != null && window.ActiveXObject) {
+            try {
+                xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) {
+                    xmlhttp = new IFrameXMLHttpRequest();
+                }
+            }
+            /*
+            xmlhttp = new IFrameXMLHttpRequest();
+            */
+        }
+        else {
+            xmlhttp = new XMLHttpRequest();
+            if (xmlhttp == null) {
+                xmlhttp = new IFrameXMLHttpRequest();
+            }
+        }
+        return xmlhttp;
+    }
+    
+</script>
+<TITLE>Books24x7</TITLE>
+
+
+    <SCRIPT TYPE="text/JavaScript" SRC="video.js"></SCRIPT>
+    <FORM METHOD="POST" NAME="CompanionFiles">
+      <INPUT TYPE="Hidden" ID="uniqueid" NAME="uniqueid" />
+      <INPUT TYPE="Hidden" NAME="task" id="task" value="getcompanionfile" />
+
+    <INPUT TYPE="Hidden" NAME="viewerform" id="viewerform" value="true" />
+
+    </FORM>
+
+</HEAD>
+
+    <BODY onload="getStyleSheets();" BGCOLOR="#FFFFFF" LEFTMARGIN="2" TOPMARGIN="2">
+    <A HREF="#top" TABINDEX=1><IMG SRC="images/_.gif" WIDTH="1" HEIGHT="1" ALT="Skip Navigation" TITLE="Skip Navigation" BORDER="0"></A><DIV ID="FrameContent"><A Name="top"></A><DIV class='b24-mobileheader'><div class='b24-mobilelogo'><IMG SRC="images/b24pqa_vsm1.gif" WIDTH="45" HEIGHT="25" ALT="Books24x7 Mobile" TITLE="Books24x7 Mobile" ALIGN="Left" BORDER="0"></div><div CLASS="b24-mobiletitle">True Story</div></DIV><HR COLOR="#cc0000" NOSHADE="1" WIDTH="100%" SIZE="1"/><INPUT TYPE="Hidden" NAME="pdamode" id="pdamode" value="true" /><div CLASS=b24-navmenu><span class='b24-mobilemenutitle'>Title Navigation</span>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function Next(item) {
+var cm = new Array(6,0,56,29,97,0,34,30,0,4,69,-1,16,37,0)
+var a1 = new Array(14,9,0)
+var a2 = new Array(5,4,3)
+var a3 = new Array(8,10,12)
+var a4 = new Array(1,2,6)
+var a5 = new Array(11,7,13)
+var b1="00"+cm[a1[item]]; b1= b1.substr(b1.length-2,2)
+var b2="00"+cm[a2[item]]; b2= b2.substr(b2.length-2,2)
+var b3="00"+cm[a3[item]]; b3= b3.substr(b3.length-2,2)
+var b4="00"+cm[a4[item]]; b4= b4.substr(b4.length-2,2)
+var b5="00"+cm[a5[item]]; b5= b5.substr(b5.length-2,2)
+var h ='viewer.asp?bookid=98765&chunkid='+b1+b2+b3+b4+b5;
+this.location=h}
+//  -->
+</SCRIPT>
+<div class="navitem" style="float:left"></div>
+<div class="navitem" style="float:right"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0"><A BORDER="0" ACCESSKEY="N" HREF="javascript:Next(1)">
+      Next Page</A></div>
+<div style="float:right;"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0"><A BORDER="0" HREF="viewer.asp?bookid=98765&amp;chunkid=497695630">
+        Next Chapter</A></div>
+<div style="float:right;"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0"><A BORDER="0" HREF="toc.asp?bookid=98765#TOC">
+      Title Table of Contents</A></div>
+<div style="float:left;"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0"><A HREF="#toc">
+      Chapter Table of Contents
+    </A></div>
+</div><div style='clear:both'></div><div class="book" id="b243-54">
+<div class="bookinfo" id="bookinfo.11111111-2222-3333-4444-555555555555">
+<h1 class="title" id="annotationlabel-first">
+<a name="b111-22" id="b111-22">True story</a>
+</h1>
+<div class="authorgroup">
+<div class="author">John Smith</div>
+<div class="author">Tony Star</div>
+</div>
+<div class="legalnotice">
+<p class="first-para" id="-1-1">Acquiring Editor: Cris Bee<br style="line-height:1" />Editorial Project Manager: Clara Price<br style="line-height:1" />Project Manager: Sam Kowalsky<br style="line-height:1" />Designer: Johny Net</p>
+<p class="first-para" id="-1-2">Kolo Inc.<br style="line-height:1" />1 Main Street, Compton, CA 12345, USA</p>
+</div>
+<p class="copyright" id="-1-3">&#169; 2015 Kolo Inc.</p>
+<div class="legalnotice">
+<p class="first-para" id="-1-4">All rights reserved.</p>
+<p class="first-para" id="-1-5">No part of this publication may be reproduced or transmitted in any form or by any means, electronic or mechanical, including photocopying, recording, or any information storage and retrieval system, without permission in writing from the publisher. Details on how to seek permission, further information about the Publisher's permissions policies and our arrangements with organizations such as the Copyright Clearance Center and the Copyright Licensing Agency, can be found at our website: <a target="_top" class="url" href="http://www.kolo.com/permissions" title="Link to another website">www.kolo.com/permissions</a>.</p>
+<p class="first-para" id="-1-6">This book and the individual contributions contained in it are protected under copyright by the Publisher (other than as may be noted herein).</p>
+<p class="first-para" id="-1-7">
+<b class="bold">Notices</b>
+<br style="line-height:1" />Knowledge and best practice in this field are constantly changing. As new research and experience broaden our understanding, changes in research methods, professional practices, or medical treatment may become necessary.</p>
+<p class="first-para" id="-1-8">Practitioners and researchers must always rely on their own experience and knowledge in evaluating and using any information, methods, compounds, or experiments described herein. In using such information or methods they should be mindful of their own safety and the safety of others, including parties for whom they have a professional responsibility.</p>
+<p class="first-para" id="-1-9">To the fullest extent of the law, neither the Publisher nor the authors, contributors, or editors, assume any liability for any injury and/or damage to persons or property as a matter of products liability, negligence or otherwise, or from any use or operation of any methods, products, instructions, or ideas contained in the material herein.</p>
+</div>
+<span class="isbn">111-2-33-445566-7<br />
+</span>
+<div class="legalnotice">
+<p class="first-para" id="-1-10">ISBN: 111-2-33-445566-7</p>
+<p class="first-para" id="-1-11">
+<b class="bold">British Library Cataloguing in Publication Data</b>
+<br style="line-height:1" />A catalogue record for this book is available from the British Library</p>
+<p class="first-para" id="-1-12">
+<b class="bold">Library of Congress Cataloging-in-Publication Data</b>
+<br style="line-height:1" />A catalog record for this book is available from the Library of Congress</p>
+<blockquote class="blockquote">
+<div class="sidebar" style="background-color:#">
+<hr class="blueline" />
+<p class="first-para" id="-1-13">For Information on all Syngress publications visit our website at <a target="_top" class="url" href="http://store.kolo.com/Syngress" title="Link to another website">store.kolo.com/Syngress</a>
+</p>
+<hr class="blueline" />
+</div>
+<div class="blankspace">
+</div>
+</blockquote>
+<p class="first-para" id="-1-14">
+<b class="bold">About the Authors</b>
+</p>
+<p class="first-para" id="-1-15">
+<b class="bold">John Smith</b>
+</p>
+<p class="first-para" id="-1-16">John Smith is a baker.</p>
+<p class="first-para" id="-1-17">
+<b class="bold">Tony Star</b>
+</p>
+<p class="first-para" id="-1-18">A milkman professional.</p>
+<p class="first-para" id="-1-19">
+<b class="bold">Acknowledgments</b>
+</p>
+<p class="first-para" id="-1-20">
+<b class="bold">John Smith</b>
+</p>
+<p class="first-para" id="-1-21">I would like to dedicate this book to my family.</p>
+<p class="first-para" id="-1-22">
+<b class="bold">Tony Star</b>
+</p>
+<p class="first-para" id="-1-23">I would like to dedicate this book to my sister.</p>
+</div>
+</div>
+</div>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function Jump(item,offset) {
+var cm = new Array(0,0,1,0,0)
+var a1 = new Array(3)
+var a2 = new Array(1)
+var a3 = new Array(4)
+var a4 = new Array(0)
+var a5 = new Array(2)
+var b1="00"+cm[a1[item]]; b1= b1.substr(b1.length-2,2)
+var b2="00"+cm[a2[item]]; b2= b2.substr(b2.length-2,2)
+var b3="00"+cm[a3[item]]; b3= b3.substr(b3.length-2,2)
+var b4="00"+cm[a4[item]]; b4= b4.substr(b4.length-2,2)
+var b5="00"+cm[a5[item]]; b5= b5.substr(b5.length-2,2)
+var h ='viewer.asp?bookid=98765&chunkid='+b1+b2+b3+b4+b5
+if(offset) h+='&rowid='+offset;
+this.location=h}
+//  -->
+</SCRIPT>
+<HR xmlns:dc="http://purl.org/dc/elements/1.0/"><A NAME="toc" xmlns:dc="http://purl.org/dc/elements/1.0/"></A><DIV CLASS="b24-title2" xmlns:dc="http://purl.org/dc/elements/1.0/"> Contents</DIV><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><div CLASS=b24-navmenu><span class='b24-mobilemenutitle'>Title Navigation</span>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function Next(item) {
+var cm = new Array(25,6,67,99,0,0,9,49,-1,0,93,67,73,71,0)
+var a1 = new Array(1,5,6)
+var a2 = new Array(0,9,3)
+var a3 = new Array(11,4,13)
+var a4 = new Array(12,14,10)
+var a5 = new Array(2,8,7)
+var b1="00"+cm[a1[item]]; b1= b1.substr(b1.length-2,2)
+var b2="00"+cm[a2[item]]; b2= b2.substr(b2.length-2,2)
+var b3="00"+cm[a3[item]]; b3= b3.substr(b3.length-2,2)
+var b4="00"+cm[a4[item]]; b4= b4.substr(b4.length-2,2)
+var b5="00"+cm[a5[item]]; b5= b5.substr(b5.length-2,2)
+var h ='viewer.asp?bookid=77615&chunkid='+b1+b2+b3+b4+b5;
+this.location=h}
+//  -->
+</SCRIPT>
+<div class="navitem" style="float:left"></div>
+<div class="navitem" style="float:right"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0"><A BORDER="0" ACCESSKEY="N" HREF="javascript:Next(1)">
+      Next Page</A></div>
+<div style="float:right;"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0"><A BORDER="0" HREF="viewer.asp?bookid=98765&amp;chunkid=497695630">
+        Next Chapter</A></div>
+<div style="float:right;"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0"><A BORDER="0" HREF="toc.asp?bookid=98765#TOC">
+      Title Table of Contents</A></div>
+<div style="float:left;"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0"><A HREF="#toc">
+      Chapter Table of Contents
+    </A></div>
+</div><div style='clear:both'></div><div CLASS="b24-navmenu" WIDTH="1%" NOWRAP="1" xmlns:dc="http://purl.org/dc/elements/1.0/">
+<div class="b24-mobilemenutitle">Tools</div>
+<div style="clear:both; width:100%"></div>
+<div style="float:left"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0"><A HREF="bookshelf.asp?bookid=98765&amp;view=add">Add to My Plan</A></div>
+<div style="float:right"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0"><A HREF="bookmark.asp?task=new&amp;bookid=98765&amp;chunkid=1&amp;r2b=1">Bookmark This Location</A></div>
+</div>
+<div CLASS=b24-navmenu><div class='b24-mobilemenutitle'>Main Menu</div><div style='clear:both;width:100%'></div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="searchpage.asp" ACCESSKEY="S" BORDER="0">Search</A></div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="bookshelf.asp?task=view" BORDER="0">My Folders</A></div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="topics.asp" BORDER="0">Browse Topics</A></div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="help.asp" BORDER="0">Help</A></div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="Preferences.asp" BORDER="0">Settings</A></div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="abandonsession.asp" BORDER="0">Logout</A></div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="#top" ACCESSKEY="C" BORDER="0">Top of Page</A></div></div><P class="b24-mobileuser"><B>User:&nbsp;</B>Thomas&nbsp;Anderson<P/><HR><span class='b24-mobilefooter'>Use of content on this site is expressly subject to the restrictions set forth in the <A HREF="help.asp?item=membership" BORDER="0">Books24x7 Membership Agreement</A></span><DIV STYLE="position:relative;z-index:1;top:0px;left:0px;xwidth:320px;text-align:left;"></DIV></DIV>
+</BODY>
+
+</HTML>
