@@ -1,0 +1,5 @@
+#Do not use that file it's only template what variables should be exported to have working environment.
+
+export SS2BOOK_USERNAME=""
+export SS2BOOK_PASSWORD=""
+export SS2BOOK_GROUPCODE=""

@@ -6,9 +6,6 @@
 #ss2book temporary downloaded sites
 tmp/
 
-# private credentials
-env_vars
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
