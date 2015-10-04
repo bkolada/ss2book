@@ -46,7 +46,7 @@ class SkillportSpider(scrapy.Spider):
         @returns items 0 0
         @returns request 0 0
         """
-        self.save_response(response, "log_in.html")
+        self.save_response(response, "login.html")
         if 'abandonsession.asp' in response.body:
             self.logger.info("logged into skillport")
             first_page_url = self.page_url % (self.book_id, '0000000001')
@@ -62,7 +62,7 @@ class SkillportSpider(scrapy.Spider):
         @returns items 0 0
         @returns request 1 1
         """
-        if '<A HREF="help.asp?item=membership" BORDER="0">offlined</A>'.lower() in response.body.lower():
+        if 'offlined' in response.body:
             self.logger.critical("Crawler couldn't get page - content is scrambled. Crawling aborted")
             return
 
@@ -71,6 +71,7 @@ class SkillportSpider(scrapy.Spider):
         self.save_response(response, 'page%d.html' % page_num)
 
         next_chunk = self.gen_next_chunk(response.body)
+
         if next_chunk == '00000000-1' or page_num > 5:
             self.logger.info('Crawler finished a book. Thank you')
             yield scrapy.Request(self.logout_url, callback=self.parse_logout)
