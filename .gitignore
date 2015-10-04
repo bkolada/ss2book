@@ -6,6 +6,9 @@
 #ss2book temporary downloaded sites
 tmp/
 
+#intellij directories
+.idea/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
