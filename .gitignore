@@ -9,6 +9,9 @@ env_vars
 #ss2book temporary downloaded sites
 tmp/
 
+#scrapy ds_store
+.DS_store
+
 #intellij directories
 .idea/
 
