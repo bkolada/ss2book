@@ -2,6 +2,7 @@
 import scrapy
 import os
 from ss2book import settings
+from ss2book.items import PageItem
 import re
 
 
@@ -16,9 +17,13 @@ class SkillportSpider(scrapy.Spider):
     def __init__(self, book_id='62126', *args, **kwargs):
         super(SkillportSpider, self).__init__(*args, **kwargs)
         self.book_id = book_id
-        self.directory_path = os.path.join(settings.TMP_DIR, self.book_id)
+        self.directory_path = os.path.join(settings.TMP_DIR, self.book_id, "source")
         if not os.path.exists(self.directory_path):
             os.makedirs(self.directory_path)
+
+        self.directory_path_raw = os.path.join(settings.TMP_DIR, self.book_id, "raw")
+        if not os.path.exists(self.directory_path_raw):
+            os.makedirs(self.directory_path_raw)
 
     def start_requests(self):
         form = {
@@ -62,7 +67,8 @@ class SkillportSpider(scrapy.Spider):
         @returns items 0 0
         @returns request 1 1
         """
-        if 'offlined' in response.body:
+        if '>offlined</A>' in response.body:
+            self.save_response(response, 'page-scrambled.html')
             self.logger.critical("Crawler couldn't get page - content is scrambled. Crawling aborted")
             return
 
@@ -70,6 +76,11 @@ class SkillportSpider(scrapy.Spider):
         self.save_response(response, 'page%d.html' % page_num)
 
         next_chunk = self.gen_next_chunk(response.body)
+
+        #yield PageItem(id = page_num, content = response.xpath('//div[@style="clear:both"][1]/following-sibling::div[1]').extract())
+        self.save_raw_content(
+            response.xpath('//div[@style="clear:both"][1]/following-sibling::div[1]').extract()[0].encode('utf-8'),
+            'page%d.html' % page_num)
 
         if next_chunk == '00000000-1':
             self.logger.info('Crawler finished a book. Thank you')
@@ -103,11 +114,22 @@ class SkillportSpider(scrapy.Spider):
 
         result = ''.join([cm_payload[int(value)] for _x, value in ax_list])
         self.logger.debug('next_chunk: %s', result)
-
         return result
 
+    def process_response(self, response):
+        page_num = response.meta.get('page_num', None)
+        if page_num:
+            return response.body.replace("javascript:Next(1)", "page%d.html" % (page_num+1))
+        return response.body
+
     def save_response(self, response, filename):
+        "it could become deprecated"
         file_path = os.path.join(self.directory_path, filename)
         self.logger.debug('Saving response from %s to %s' % (response.url, file_path))
         with open(file_path, 'wb') as f:
-            f.write(response.body)
+            f.write(self.process_response(response))
+
+    def save_raw_content(self, content, filename):
+        file_path = os.path.join(self.directory_path_raw, filename)
+        with open(file_path, 'wb') as f:
+            f.write(content)
