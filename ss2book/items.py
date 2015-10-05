@@ -7,10 +7,13 @@
 
 import scrapy
 
+class TitlePage(scrapy.Item):
+    title = scrapy.Field()
+    author = scrapy.Field()
+    isbn = scrapy.Field()
 
 class PageItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
+    book = scrapy.Field()
     id = scrapy.Field()
     content = scrapy.Field()
-    pass
+    file_to_download = scrapy.Field()
