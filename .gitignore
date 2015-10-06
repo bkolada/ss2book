@@ -15,6 +15,12 @@ tmp/
 #intellij directories
 .idea/
 
+#emacs unsaved file
+*~
+
+#autoenv
+.env
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
