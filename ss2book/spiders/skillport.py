@@ -70,32 +70,28 @@ class SkillportSpider(scrapy.Spider):
         if '>offlined</A>' in response.body:
             self.save_response(response, 'page-scrambled.html')
             self.logger.critical("Crawler couldn't get page - content is scrambled. Crawling aborted")
-            return
+            yield scrapy.Request(self.logout_url, callback=self.parse_logout)
 
         page_num = response.meta.get('page_num', -1)
         self.save_response(response, 'page%d.html' % page_num)
-
-        next_chunk = self.gen_next_chunk(response.body)
 
         #yield PageItem(id = page_num, content = response.xpath('//div[@style="clear:both"][1]/following-sibling::div[1]').extract())
         self.save_raw_content(
             response.xpath('//div[@style="clear:both"][1]/following-sibling::div[1]').extract()[0].encode('utf-8'),
             'page%d.html' % page_num)
 
+        next_chunk = self.gen_next_chunk(response.body)
         if next_chunk == '00000000-1':
             self.logger.info('Crawler finished a book. Thank you')
             yield scrapy.Request(self.logout_url, callback=self.parse_logout)
-
-        next_page_url = self.page_url % (self.book_id, next_chunk)
-        yield scrapy.Request(next_page_url, callback=self.parse_page, meta={'page_num': page_num+1} if page_num != -1 else {})
+        else:
+            next_page_url = self.page_url % (self.book_id, next_chunk)
+            meta = {'page_num': page_num + 1} if page_num != -1 else {}
+            yield scrapy.Request(next_page_url, callback=self.parse_page, meta=meta)
 
     def parse_logout(self, response):
         """
         parse logout response
-
-        @url file:///tmp/ss2book/invalid_username_password.html
-        @returns items 0 0
-        @returns request 0 0
         """
         self.save_response(response, 'logout.html')
         if 'loginform' in response.body:
