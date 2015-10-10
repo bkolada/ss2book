@@ -116,18 +116,12 @@ class SkillportSpider(scrapy.Spider):
         self.logger.debug('next_chunk: %s', result)
         return result
 
-    def process_response(self, response):
-        page_num = response.meta.get('page_num', None)
-        if page_num:
-            return response.body.replace("javascript:Next(1)", "page%d.html" % (page_num+1))
-        return response.body
-
     def save_response(self, response, filename):
         "it could become deprecated"
         file_path = os.path.join(self.directory_path, filename)
         self.logger.debug('Saving response from %s to %s' % (response.url, file_path))
         with open(file_path, 'wb') as f:
-            f.write(self.process_response(response))
+            f.write(response.body)
 
     def save_raw_content(self, content, filename):
         file_path = os.path.join(self.directory_path_raw, filename)
