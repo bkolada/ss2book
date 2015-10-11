@@ -36,6 +36,10 @@ FEED_EXPORTERS = {
     'fuse': 'ss2book.exporters.FuseExporter',
 }
 
+ITEM_PIPELINES = {
+    'ss2book.pipelines.CorrectLinksPipeline': 100,
+#    'myproject.pipelines.JsonWriterPipeline': 800,
+}
 # Disable cookies (enabled by default)
 # COOKIES_ENABLED=False
 

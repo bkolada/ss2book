@@ -10,4 +10,4 @@ class FuseExporter(BaseItemExporter):
         self.file = file
 
     def export_item(self, item):
-        file.write(item['content'])
+        self.file.write(item['content'])

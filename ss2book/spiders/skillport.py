@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-import os
+import os, sys
 from ss2book import settings
 from ss2book.items import PageItem
 import re
@@ -14,9 +14,10 @@ class SkillportSpider(scrapy.Spider):
     page_url = 'http://mobile.skillport.books24x7.com/viewer.asp?bookid=%s&chunkid=%s'
     logout_url = 'http://mobile.skillport.books24x7.com/abandonsession.asp'
 
-    def __init__(self, book_id='62126', *args, **kwargs):
+    def __init__(self, book_id='62126', max_page_num=sys.maxsize, *args, **kwargs):
         super(SkillportSpider, self).__init__(*args, **kwargs)
         self.book_id = book_id
+        self.max_page_num = int(max_page_num)
         self.directory_path = os.path.join(settings.TMP_DIR, self.book_id, "source")
         if not os.path.exists(self.directory_path):
             os.makedirs(self.directory_path)
@@ -75,13 +76,13 @@ class SkillportSpider(scrapy.Spider):
         page_num = response.meta.get('page_num', -1)
         self.save_response(response, 'page%d.html' % page_num)
 
-        yield PageItem(page_num = page_num, content = response.xpath('//div[@style="clear:both"][1]/following-sibling::div[1]').extract())
+        yield PageItem(page_num = page_num, content = response.xpath('//div[@style="clear:both"][1]/following-sibling::div[1]').extract()[0].encode('utf8'))
         self.save_raw_content(
-            response.xpath('//div[@style="clear:both"][1]/following-sibling::div[1]').extract()[0].encode('utf-8'),
+            response.xpath('//div[@style="clear:both"][1]/following-sibling::div[1]').extract()[0].encode('utf8'),
             'page%d.html' % page_num)
 
         next_chunk = self.gen_next_chunk(response.body)
-        if next_chunk == '00000000-1':
+        if next_chunk == '00000000-1' or page_num > self.max_page_num:
             self.logger.info('Crawler finished a book. Thank you')
             yield scrapy.Request(self.logout_url, callback=self.parse_logout)
         else:
