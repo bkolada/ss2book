@@ -64,7 +64,7 @@ class SkillportSpider(scrapy.Spider):
         parse page response
 
         @url file:///tmp/ss2book/first_page.html
-        @returns items 0 0
+        @returns items 1 1
         @returns request 1 1
         """
         if '>offlined</A>' in response.body:
@@ -75,7 +75,7 @@ class SkillportSpider(scrapy.Spider):
         page_num = response.meta.get('page_num', -1)
         self.save_response(response, 'page%d.html' % page_num)
 
-        #yield PageItem(id = page_num, content = response.xpath('//div[@style="clear:both"][1]/following-sibling::div[1]').extract())
+        yield PageItem(page_num = page_num, content = response.xpath('//div[@style="clear:both"][1]/following-sibling::div[1]').extract())
         self.save_raw_content(
             response.xpath('//div[@style="clear:both"][1]/following-sibling::div[1]').extract()[0].encode('utf-8'),
             'page%d.html' % page_num)

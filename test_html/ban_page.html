@@ -1,0 +1,148 @@
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+
+
+
+<script language="javascript" type="text/javascript">
+    function getStyleSheets(style) {
+        var basicstylesheetHREF;
+        var stylesheetHREF = null; 
+        var contentstylesheetHREF;
+        var width = window.innerWidth;
+        var viewerPage = false;
+        var viewer = false;
+        var pdamode = false;
+        
+        // is this a viewer.asp?
+        try {
+            viewer = document.getElementById("viewerform").value;
+        }
+        catch (Error) { }
+
+        // ipdamode?
+        try {
+            pdamode = document.getElementById("pdamode").value;
+        }
+        catch (Error) { }
+
+        if (width > 800) {
+            stylesheetHREF = "iphone.css";
+            contentstylesheetHREF = "iphone.content.books24x7.css";
+        }
+        else if ((width <= 800) && (width > 300)) {
+            stylesheetHREF = "blackberry.css";
+            contentstylesheetHREF = "blackberry.content.books24x7.css";
+        }
+        else {
+            contentstylesheetHREF = "pda.content.books24x7.css";
+        }
+
+        //add stylesheets
+        var headID = document.getElementsByTagName("head")[0];
+
+        if (pdamode == "true") {
+            basicstylesheetHREF = "grisonpda.css";
+        }
+        else {
+            basicstylesheetHREF = "grison.css";
+        }
+        var cssNode = document.createElement('link');
+        cssNode.type = 'text/css';
+        cssNode.rel = 'stylesheet';
+        cssNode.id = 'stylesheetJS';
+        cssNode.href = basicstylesheetHREF;
+        headID.appendChild(cssNode);
+       
+        // do not add anything if this is not iphone or blackberry
+        if (stylesheetHREF != null) {
+            var cssNode1 = document.createElement('link');
+            cssNode1.type = 'text/css';
+            cssNode1.rel = 'stylesheet';
+            cssNode1.id = 'stylesheetJS1';
+            cssNode1.href = stylesheetHREF;
+            headID.appendChild(cssNode1);
+        }
+        // if this is a viewer.asp page, load an appropriate content stylesheet
+        if (viewer == "true") {
+            var cssNode2 = document.createElement('link');
+            cssNode2.type = 'text/css';
+            cssNode2.rel = 'stylesheet';
+            cssNode2.id = 'stylesheetJS2';
+            cssNode2.href = contentstylesheetHREF;
+            headID.appendChild(cssNode2);
+        }
+        var XMLHttpRequestObject = initXMLHttp();
+        if (XMLHttpRequestObject) {
+        // save the stylesheet in state
+            var dataSource = "data.asp?svc=state&data=savedstylesheet&data=" + stylesheetHREF;
+            var _datenow = new Date();
+            dataSource += "&time=" + _datenow.getTime();  // make absolutely sure nobody caches it
+            XMLHttpRequestObject.open("GET", dataSource, true);
+            XMLHttpRequestObject.onreadystatechange = function() { // don't care
+            }
+            XMLHttpRequestObject.send(null);
+        }
+    }
+
+    function initXMLHttp() {
+        var xmlhttp = null;
+        if (window != null && window.XMLHttpRequest) {
+            xmlhttp = new XMLHttpRequest();
+        }
+        else if (window != null && window.ActiveXObject) {
+            try {
+                xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) {
+                    xmlhttp = new IFrameXMLHttpRequest();
+                }
+            }
+            /*
+            xmlhttp = new IFrameXMLHttpRequest();
+            */
+        }
+        else {
+            xmlhttp = new XMLHttpRequest();
+            if (xmlhttp == null) {
+                xmlhttp = new IFrameXMLHttpRequest();
+            }
+        }
+        return xmlhttp;
+    }
+    
+</script>
+<TITLE>Books24x7</TITLE>
+
+
+</HEAD>
+
+    <BODY onload="getStyleSheets();" BGCOLOR="#FFFFFF" LEFTMARGIN="2" TOPMARGIN="2">
+    <A HREF="#top" TABINDEX=1><IMG SRC="images/_.gif" WIDTH="1" HEIGHT="1" ALT="Skip Navigation" TITLE="Skip Navigation" BORDER="0"></A><DIV ID="FrameContent"><A Name="top"></A><DIV class='b24-mobileheader'><div class='b24-mobilelogo'><IMG SRC="images/b24pqa_vsm1.gif" WIDTH="45" HEIGHT="25" ALT="Books24x7 Mobile" TITLE="Books24x7 Mobile" ALIGN="Left" BORDER="0"></div><div class='b24-mobiletitle'>&nbsp;Help</div><BR><HR COLOR="#cc0000" NOSHADE="1" WIDTH="100%" SIZE="1"/><INPUT TYPE="Hidden" NAME="pdamode" id="pdamode" value="true" /><TABLE WIDTH="100%" CELLPADDING="0" CELLSPACING="0" BORDER="0">
+<TR><TD><IMG SRC="images/_.gif" WIDTH="1" BORDER="0" VSPACE="0" HSPACE="0" ALT="" HEIGHT="5"></TD></TR>
+</TABLE>
+<TABLE WIDTH="100%" CELLPADDING="0" CELLSPACING="0" BORDER="0">
+<TR><TD><IMG SRC="images/_.gif" WIDTH="1" BORDER="0" VSPACE="0" HSPACE="0" ALT="" HEIGHT="20"></TD></TR>
+</TABLE>
+<P CLASS="b24-doc-title">Warning</P>
+<P CLASS="b24-doc-para">We have noticed activity on your subscription with Books24x7 that
+  suggests you may be downloading an excessive amount of content for offline
+  viewing or use.  You may not be aware that the
+  <A HREF="help.asp?item=membership">Membership Agreement</A> prohibits
+  such activity unless explicitly authorized by Books24x7.</P>
+<P CLASS="b24-doc-para">Please remember that this service is an online resource and should be
+  used accordingly.  Thank you for your understanding and cooperation.</P>
+<FORM CLASS="b24-form" ID="ackform" NAME="ackform" ACTION="help.asp" METHOD="POST">
+<DIV CLASS="b24-formelement"><INPUT CLASS="b24-forminput" TYPE="submit" VALUE="Acknowledged"></DIV><INPUT TYPE="hidden" NAME="ack" VALUE="1"></FORM>
+<P CLASS="b24-doc-para">More information about Acceptable Usage can be <A HREF="http://help.books24x7.com/bkb/index.htm#30382">found here.</A></P>
+<DIV CLASS=b24-navmenu><span class='b24-mobilemenutitle'>Help Menu</span><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=default" xmlns:dc="http://purl.org/dc/elements/1.0/">Help Home</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=find" xmlns:dc="http://purl.org/dc/elements/1.0/">Finding Titles</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=search" xmlns:dc="http://purl.org/dc/elements/1.0/">Searching</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=downloads" xmlns:dc="http://purl.org/dc/elements/1.0/">Downloads</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=view" xmlns:dc="http://purl.org/dc/elements/1.0/">Accessing Titles</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=bookmark" xmlns:dc="http://purl.org/dc/elements/1.0/">Creating Bookmarks</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=bookmark2" xmlns:dc="http://purl.org/dc/elements/1.0/">Editing Bookmarks</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=bookshelf" xmlns:dc="http://purl.org/dc/elements/1.0/">My Folders</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=corporate" xmlns:dc="http://purl.org/dc/elements/1.0/">Corporate Folders</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=prefs" xmlns:dc="http://purl.org/dc/elements/1.0/">Settings</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=tips" xmlns:dc="http://purl.org/dc/elements/1.0/">Search Tips</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=acceptableuse" xmlns:dc="http://purl.org/dc/elements/1.0/">Warning Messages</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=secure" xmlns:dc="http://purl.org/dc/elements/1.0/">Secure Forms</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=membership" xmlns:dc="http://purl.org/dc/elements/1.0/">Membership Agreement</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=privacy" xmlns:dc="http://purl.org/dc/elements/1.0/">Privacy Statement</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0" xmlns:dc="http://purl.org/dc/elements/1.0/"><A HREF="help.asp?item=faq" xmlns:dc="http://purl.org/dc/elements/1.0/">Frequently Asked Questions</A><BR xmlns:dc="http://purl.org/dc/elements/1.0/"></DIV><div CLASS="b24-navmenu" WIDTH="1%" NOWRAP="1" xmlns:dc="http://purl.org/dc/elements/1.0/">
+<div class="b24-mobilemenutitle">Tools</div>
+<div style="clear:both; width:100%"></div>
+<div style="float:left"><IMG SRC="images/b24-mobilebullet.gif" BORDER="0"><A HREF="viewer.asp?bookid=77615&amp;chunkid=1">Last Title</A></div>
+</div>
+<div CLASS=b24-navmenu><div class='b24-mobilemenutitle'>Main Menu</div><div style='clear:both;width:100%'></div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="searchpage.asp" ACCESSKEY="S" BORDER="0">Search</A></div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="bookshelf.asp?task=view" BORDER="0">My Folders</A></div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="topics.asp" BORDER="0">Browse Topics</A></div><div style='float:left'><img src="images/b24-mobilebullet.gif">Help</div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="Preferences.asp" BORDER="0">Settings</A></div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="abandonsession.asp" BORDER="0">Logout</A></div><div style='float:left'><img src="images/b24-mobilebullet.gif"><A HREF="#top" ACCESSKEY="C" BORDER="0">Top of Page</A></div></div><P class="b24-mobileuser"><B>User:&nbsp;</B>Thomas&nbsp;Anderson<P/><HR><span class='b24-mobilefooter'>Use of content on this site is expressly subject to the restrictions set forth in the <A HREF="help.asp?item=membership" BORDER="0">Books24x7 Membership Agreement</A></span><DIV STYLE="position:relative;z-index:1;top:0px;left:0px;xwidth:320px;text-align:left;"></DIV></DIV>
+</BODY>
+
+</HTML>

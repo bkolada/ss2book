@@ -13,7 +13,6 @@ class TitlePage(scrapy.Item):
     isbn = scrapy.Field()
 
 class PageItem(scrapy.Item):
-    book = scrapy.Field()
-    id = scrapy.Field()
+    page_num = scrapy.Field()
     content = scrapy.Field()
-    file_to_download = scrapy.Field()
+
